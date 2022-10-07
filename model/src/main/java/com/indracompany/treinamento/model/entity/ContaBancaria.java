@@ -11,29 +11,31 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "contas_bancarias")
+@Table(name = "contas_bancarias_pedroL")
 @Data
+@Getter
+@Setter	
 @EqualsAndHashCode(callSuper = true)
 public class ContaBancaria extends GenericEntity<Long>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	@Column(length = 4)
+	
 	private String agencia;
 	
-	@Column(length = 6)
+	@Column(length = 6, unique=true)
 	private String numero;
 	
 	@Column
 	private double saldo;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_cliente_id")
+	@JoinColumn(name = "fk_clientes_pedroL_id")
 	private Cliente cliente;
-	
-	
 }

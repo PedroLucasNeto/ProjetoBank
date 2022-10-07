@@ -13,4 +13,5 @@ public interface ContaBancariaRepository extends GenericCrudRepository<ContaBanc
 	//public List<OperacaoConta> findByOperacaoContaDataTransacaoBetweenAndAgenciaAndNumero(Date dataInicio, Date dataFim, String agencia, String numero);
 	
 	
+	
 }

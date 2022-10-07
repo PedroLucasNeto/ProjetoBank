@@ -26,4 +26,5 @@ public interface OperacaoContaRepository extends GenericCrudRepository<OperacaoC
 	@Query(value = "select * from operacaoConta where dataTransacao >= (:dataInicio) and dataTransacao <= (:dataFim)", nativeQuery = true)
     public Optional<List<OperacaoConta>> findByDatas(@Param ("dataInicio") Date dataInicio, @Param ("dataFim") Date dataFim);
 	
+	public Optional<List<OperacaoConta>> findByContaBancariaAgenciaAndContaBancariaNumero(String agencia, String numero);
 }

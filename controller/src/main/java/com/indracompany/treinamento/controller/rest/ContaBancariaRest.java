@@ -3,14 +3,17 @@ package com.indracompany.treinamento.controller.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,6 +52,27 @@ public class ContaBancariaRest extends GenericCrudRest<ContaBancaria, Long, Cont
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/depositoNaConta", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<Void> depositarNaConta(@RequestParam String agencia, @RequestParam String numero, @RequestParam double valor){
+		DepositoDTO depositoDTO = new DepositoDTO();
+		depositoDTO.setAgencia(agencia);
+		depositoDTO.setNumeroConta(numero);
+		depositoDTO.setValor(valor);
+		contaBancariaService.depositar(depositoDTO);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	
+	@PutMapping(value = "/saqueNaConta", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<Void> sacarNaConta(@RequestParam String agencia, @RequestParam String numero, @RequestParam double valor){
+		SaqueDTO saqueDTO = new SaqueDTO();
+		saqueDTO.setAgencia(agencia);
+		saqueDTO.setNumeroConta(numero);
+		saqueDTO.setValor(valor);
+		contaBancariaService.sacar(saqueDTO);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
 	
 	@PutMapping(value = "/sacar", produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ResponseEntity<Void> sacar (@RequestBody SaqueDTO dto){
@@ -58,8 +82,8 @@ public class ContaBancariaRest extends GenericCrudRest<ContaBancaria, Long, Cont
 	
 	
 	@PutMapping(value = "/transferencia", produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseEntity<Void> transferir (@RequestBody TransferenciaBancariaDTO dto){
-		contaBancariaService.transferir(dto);
+	public @ResponseBody ResponseEntity<Void> transferir (@RequestBody TransferenciaBancariaDTO transferenciaBancariaDTO){
+		contaBancariaService.transferir(transferenciaBancariaDTO);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
@@ -69,5 +93,17 @@ public class ContaBancariaRest extends GenericCrudRest<ContaBancaria, Long, Cont
 		return new ResponseEntity<ContaBancaria>(conta, HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/criaConta", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<Void> criaContaCliente(@RequestBody ContaClienteDTO contaClienteDTO) {
+		contaBancariaService.criaConta(contaClienteDTO);
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
+	}
+	
+//	@PostMapping(value = "/criaContaParams", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public @ResponseBody ResponseEntity<ContaBancaria> criaConta(@RequestParam String numero, @RequestParam String agencia, @RequestParam String cpf) {
+//		ContaBancaria contaBancaria = contaBancariaService.criaContaParam(agencia,numero,cpf);
+//		
+//		return new ResponseEntity<ContaBancaria>(contaBancaria, HttpStatus.CREATED);
+//	}
 	
 }

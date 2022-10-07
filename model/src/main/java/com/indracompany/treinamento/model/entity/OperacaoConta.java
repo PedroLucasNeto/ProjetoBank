@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 
 
 @Entity
-@Table(name = "operacaoConta")
+@Table(name = "operacaoConta_pedroL")
 @Data
 @EqualsAndHashCode(callSuper=false)
 public class OperacaoConta extends GenericEntity<Long>{

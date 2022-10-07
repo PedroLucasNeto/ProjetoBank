@@ -55,4 +55,16 @@ public class OperacaoContaRest extends GenericCrudRest<OperacaoConta, Long, Oper
 		return new ResponseEntity<>(listaDeExtratosPorData, HttpStatus.OK);
 
 	}
+	
+	@GetMapping(value = "/listaExtratosDaConta/{agencia}/{numero}")
+	public @ResponseBody ResponseEntity<List<OperacaoContaDTO>> listaExtratosDaConta( @PathVariable String agencia,
+			@PathVariable String numero) {
+		List<OperacaoContaDTO> listaDeExtratos = operacaoContaService.listaExtratosDaConta(agencia, numero);
+		if (listaDeExtratos == null || listaDeExtratos.isEmpty()) {
+			return new ResponseEntity<>(listaDeExtratos, HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(listaDeExtratos, HttpStatus.OK);
+
+	}
 }

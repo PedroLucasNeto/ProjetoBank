@@ -15,24 +15,26 @@ import com.indracompany.treinamento.model.dto.ContaClienteDTO;
 import com.indracompany.treinamento.model.dto.DepositoDTO;
 import com.indracompany.treinamento.model.dto.SaqueDTO;
 import com.indracompany.treinamento.model.dto.TransferenciaBancariaDTO;
+import com.indracompany.treinamento.model.entity.Cliente;
 import com.indracompany.treinamento.model.entity.ContaBancaria;
 import com.indracompany.treinamento.model.entity.OperacaoConta;
 import com.indracompany.treinamento.model.entity.TipoTransacao;
+import com.indracompany.treinamento.model.repository.ClienteRepository;
 import com.indracompany.treinamento.model.repository.ContaBancariaRepository;
 import com.indracompany.treinamento.model.repository.OperacaoContaRepository;
 import com.indracompany.treinamento.util.CpfUtil;
 
 @Service
 public class ContaBancariaService extends GenericCrudService<ContaBancaria, Long, ContaBancariaRepository> {
-
-	@Autowired
-	private ClienteService clienteService;
-
+	
 	@Autowired
 	private ContaBancariaRepository contaBancariaRepository;
 
 	@Autowired
 	private OperacaoContaRepository operacaoContaRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 
 	public List<ContaClienteDTO> listarContasDoCliente(String cpf) {
 
@@ -96,6 +98,9 @@ public class ContaBancariaService extends GenericCrudService<ContaBancaria, Long
 		this.adicionaOperacaoNoExtrato(TipoTransacao.TRANSFERENCIA, transferenciaDto.getValor(), transferenciaDto.getAgenciaOrigem(), transferenciaDto.getNumeroContaOrigem());
 	}
 
+	
+	
+	
 	public ContaBancaria carregarConta(String agencia, String numero) {
 		ContaBancaria conta = contaBancariaRepository.findByAgenciaAndNumero(agencia, numero);
 
@@ -118,4 +123,43 @@ public class ContaBancariaService extends GenericCrudService<ContaBancaria, Long
 		operacaoContaRepository.save(operacaoConta);
 		
 	}
+	
+	
+	public ContaBancaria criaConta(ContaClienteDTO contaClienteDTO) {
+
+		
+		if (contaClienteDTO.equals(null)) {
+			throw new AplicacaoException(ExceptionValidacoes.ERRO_CONTA_INVALIDA);
+		}
+		
+		ContaBancaria contaBancaria = new ContaBancaria();
+		Cliente cliente = clienteRepository.findByCpf(contaClienteDTO.getCpf());
+		
+		contaBancaria.setCliente(cliente);
+		contaBancaria.setAgencia(contaClienteDTO.getAgencia());
+		contaBancaria.setNumero(contaClienteDTO.getNumero());
+		contaBancaria.setSaldo(0);
+		contaBancariaRepository.save(contaBancaria);
+		return contaBancaria;
+	}
+	
+//	public ContaBancaria criaContaParam(String agencia, String numero, String cpf) {
+//		
+//		ContaBancaria contaBancaria = new ContaBancaria();
+//		
+//		if (agencia!=null && numero != null & cpf != null) {
+//			
+//			Cliente cliente = clienteRepository.findByCpf(cpf);
+//			
+//			contaBancaria.setAgencia(agencia);
+//			contaBancaria.setCliente(cliente);
+//			contaBancaria.setNumero(numero);
+//			contaBancaria.setSaldo(0);
+//			
+//			
+//		}
+//		return contaBancariaRepository.save(contaBancaria);
+//		}
+//		
+//	
 }

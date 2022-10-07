@@ -62,4 +62,21 @@ public class OperacaoContaService extends GenericCrudService<OperacaoConta, Long
 
 	}
 
+	public List<OperacaoContaDTO> listaExtratosDaConta(String agencia, String numero) {
+
+		List<OperacaoConta> extratosDaConta = operacaoContaRepository.findByContaBancariaAgenciaAndContaBancariaNumero(agencia, numero)
+				.orElseThrow(() -> new AplicacaoException(ExceptionValidacoes.ALERTA_NENHUM_REGISTRO_ENCONTRADO));
+		List<OperacaoContaDTO> listaRetorno = new ArrayList<>();
+
+		for (OperacaoConta operacaoConta : extratosDaConta) {
+			OperacaoContaDTO operacaoContaDTO = new OperacaoContaDTO();
+			BeanUtils.copyProperties(operacaoConta, operacaoContaDTO);
+			String data = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(operacaoConta.getDataTransacao());
+			operacaoContaDTO.setDataTransacao(data);
+			listaRetorno.add(operacaoContaDTO);
+
+		}
+		return listaRetorno;
+	}
+
 }

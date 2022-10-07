@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "clientes")
+@Table(name = "clientes_pedroL")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Cliente extends GenericEntity<Long>{
@@ -29,10 +29,11 @@ public class Cliente extends GenericEntity<Long>{
 	private String nome;
 	
 	@CPF
-	@Column(length = 11)
+	@Column(length = 11, unique=true)
 	private String cpf;
 	
 	@Email
+	@Column(unique =true)
 	private String email;
 	
 	private boolean ativo;
